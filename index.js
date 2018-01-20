@@ -313,6 +313,10 @@ function getAsProfile(req, res) {
       reg = /&u=([0-9]+)/
       var forumid = reg.exec($('#viewforumprofile').attr('href'))[1];
 
+      var av = $('.bcentre big b');
+      var pseudo = av.text().slice(1);
+      var avatar = av.parent().prev().attr('src');
+
       var main = {};
       $('#main_information table tbody tr').each(function(i, elem) {
         if ($(this).children().length == 3) {
@@ -343,7 +347,8 @@ function getAsProfile(req, res) {
         url: "https://www.animationsource.org/hub/en/profile/&numg="+req.params.id,
         infos: {
           lang: canon[1],
-          pseudo: $('.bcentre big b').text().slice(1),
+          pseudo: pseudo,
+          avatar: avatar,
           forumid: forumid,
           online: $('.bcentre img[title=online]').length == 1,
           main: main,
