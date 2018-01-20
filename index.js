@@ -128,10 +128,15 @@ function getAsChat(req, res) {
     $('.sboxt').each(function(i, elem) {
       times[i] = $(this).text().replace(/\t|\n|\(|\) /g,"");
     });
-
+    reg = /&numg=([0-9]+)/
     var connects = [];
     $('img[width=50]').each(function(i, elem) {
-      connects[i] = $(this).attr('title');
+      connects[i] = {
+        name: $(this).attr('title'),
+        avatar: $(this).attr('src'),
+        id: reg.exec($(this).parent().attr('href'))[1]
+      }
+
     });
 
     //console.log(avatars);
