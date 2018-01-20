@@ -307,7 +307,7 @@ function getAsProfile(req, res) {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
       //res.send(body);
-      var reg = /.org\/hub\/(fr|en)\/profile\/([a-zA-Z0-9_-]+)\/(\d+)/
+      var reg = /.org\/hub\/(fr|en)\/profile\/([^\/]+)\/(\d+)/
       var canon = reg.exec($('link[rel=canonical]').attr('href'));
       
       reg = /&u=([0-9]+)/
