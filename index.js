@@ -342,6 +342,16 @@ function getAsProfile(req, res) {
         }
       });
 
+      var desc = $('table.bs2 div[style^=padding]').html();
+      const $2 = cheerio.load(desc);
+      $2('img').each(function(i, elem) {
+        if ($2(this).attr('src').startsWith('/')) {
+          $2(this).attr('src', "https://www.animationsource.org" + $2(this).attr('src'));
+        }
+      });
+      var desc = $2.html();
+
+
       res.json({
         id: canon[3],
         url: "https://www.animationsource.org/hub/en/profile/&numg="+req.params.id,
@@ -352,7 +362,7 @@ function getAsProfile(req, res) {
           forumid: forumid,
           online: $('.bcentre img[title=online]').length == 1,
           main: main,
-          desc: $('table.bs2 div[style^=padding]').html()
+          desc: desc
         },
         options : options, 
         methode : req.method
