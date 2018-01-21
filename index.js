@@ -479,13 +479,15 @@ function getCom($, elem) {
       var date = $(this).find('span[itemprop*=datePublished]').first().text();
       var tmpp = $(this).find('.commenttable2').first();
       tmpp.find('img').replaceWith(function() { return $(this).attr("alt"); }) // Remove smileys
-      var content = tmpp.text();
+      var content = tmpp.text().replace('\n',' ');
       var author_n, author_id, author_av;
       var author = $(this).find('div[itemprop=name]').children().first();
       author_av = author.find('img').first().attr('src');
       author_n = author.find('center').first().text();
       var reg = /([0-9]+).html/
-      author_id = reg.exec(author.find('a').first().attr('href'))[1];
+      try {
+        author_id = reg.exec(author.find('a').first().attr('href'))[1];
+      } catch (e) { author_id = "1"; }
       
 
       main[i] = {
