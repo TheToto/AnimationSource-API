@@ -334,22 +334,23 @@ function getAsProfile(req, res) {
               try {
               main[pos] = new Date(reg.exec($(this).children().last().text())[1]).getTime() / 1000;
               }
-              catch (e) { }
+              catch (e) { console.log('Date not show'); }
               break;
             default:
               main[pos] = $(this).children().last().text();
           }
         }
       });
-
-      var desc = $('table.bs2 div[style^=padding]').html();
-      const $2 = cheerio.load(desc);
-      $2('img').each(function(i, elem) {
-        if ($2(this).attr('src').startsWith('/')) {
-          $2(this).attr('src', "https://www.animationsource.org" + $2(this).attr('src'));
-        }
-      });
-      var desc = $2.html();
+      try {
+        var desc = $('table.bs2 div[style^=padding]').html();
+        const $2 = cheerio.load(desc);
+        $2('img').each(function(i, elem) {
+          if ($2(this).attr('src').startsWith('/')) {
+            $2(this).attr('src', "https://www.animationsource.org" + $2(this).attr('src'));
+          }
+        });
+        var desc = $2.html();
+      } catch (e) { console.log('No desc...'); var desc = "No description" }
 
 
       res.json({
