@@ -477,7 +477,9 @@ function getCom($, elem) {
       var id = $(this).children().first().attr('name').slice(6);
       
       var date = $(this).find('span[itemprop*=datePublished]').first().text();
-      var content = $(this).find('.commenttable2').first().html();
+      var tmpp = $(this).find('.commenttable2').first();
+      tmpp.find('img').replaceWith(function() { return $(this).attr("alt"); }) // Remove smileys
+      var content = tmpp.text();
       var author_n, author_id, author_av;
       var author = $(this).find('div[itemprop=name]').children().first();
       author_av = author.find('img').first().attr('src');
