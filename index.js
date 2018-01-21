@@ -470,7 +470,7 @@ function getCommentProfile(req, res) {
 }
 
 function getCom($, elem) {
-  var main = {};
+  var main = [];
   elem.children().each(function(i, elem) {
     if (elem.tagName == "table" || elem.tagName == "br" || elem.tagName == "center" ) {} else {
 
@@ -482,7 +482,8 @@ function getCom($, elem) {
       var author = $(this).find('div[itemprop=name]').children().first();
       author_av = author.find('img').first().attr('src');
       author_n = author.find('center').first().text();
-      author_id = author.find('a').first().attr('href');
+      var reg = /([0-9]+).html/
+      author_id = reg.exec(author.find('a').first().attr('href'))[1];
       
 
       main[i] = {
