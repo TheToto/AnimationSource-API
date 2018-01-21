@@ -197,10 +197,10 @@ function getAsActiveChat(req, res) {
 
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
-
+      var reg = /.org\/([^\/]+)\//
       var chats = [];
       $('img[src="https://www.animationsource.org/sites_content/lion_king/img_layout/jungle_hakuna_matata/site_round.png"]').each(function(i, elem) {
-        chats[i] = $(this).parent().attr('href');
+        chats[i] = reg.exec($(this).parent().attr('href'))[1];
       });
   
       var texts = [];
