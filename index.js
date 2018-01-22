@@ -35,6 +35,9 @@ router.route('/profile/:id/comments')
 .get(function(req,res){ 
     getCommentProfile(req,res);
 })
+.post(function(req,res){
+    sendCommentProfile(req,res);
+})
 
 router.route('/connect')
 // POST user/pass
@@ -458,6 +461,42 @@ function getCommentProfile(req, res) {
       res.json({
         url: "https://www.animationsource.org/hub/en/profile/&numg="+req.params.id,
         main: main,
+        options : options, 
+        methode : req.method
+      });
+      console.log("ok");
+    } else { 
+      res.json({
+        error : "error request"
+      });
+    }
+  });
+}
+
+function sendCommentProfile(req, res) {
+
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded',
+    'cookie' : req.body.cookie
+  }
+
+  var options = {
+    url: 'https://www.animationsource.org/start.php?sitename=hub&langname=fr&act=profile&numg=' + req.params.id + '&dopost=1',
+    method: 'POST',
+    encoding: 'binary',
+    headers: headers,
+    form: {
+      'comm': req.body.comm,
+    }
+  }
+  
+  request(options, function (error, response, body) {
+
+    if (!error && response.statusCode == 200) {
+      //res.send(body);
+      res.json({
+        confirm : true,
         options : options, 
         methode : req.method
       });
