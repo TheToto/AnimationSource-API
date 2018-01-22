@@ -487,7 +487,7 @@ function getCom($, elem) {
       var reg = /([0-9]+).html/
       try {
         author_id = reg.exec(author.find('a').first().attr('href'))[1];
-      } catch (e) { author_id = "1"; }
+      } catch (e) { author_id = "1"; author_av = "https://www.animationsource.org/images/shared/no_avi_fr.jpg"; }
       
 
       main[i] = {
