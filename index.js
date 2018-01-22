@@ -365,6 +365,7 @@ function getAsProfile(req, res) {
           main: main,
           desc: desc
         },
+        comments: getCom($, $('#last_comments')),
         options : options, 
         methode : req.method
       });
