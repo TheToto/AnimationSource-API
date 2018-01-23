@@ -27,7 +27,7 @@ router.route('/')
 router.route('/test')
 //POST
 .post(function(req,res){
-  testCotestnnect(req,res);
+  test(req,res);
 })
 
 router.route('/mp')
@@ -710,7 +710,7 @@ function search(req, res) { // NEED TO CLEAN THIS FUNC. NEED BETTER RESPONCE
 
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
-      if ($('.emsg').length > 0) {
+      if ($('.emsg').length > 0) { // You have used the search engine a bit too much. This is a very ressource consuming process, so please wait 5 minutes before trying again.
         res.json({
           success: false,
           type: req.params.type,
