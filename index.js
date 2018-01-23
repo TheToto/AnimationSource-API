@@ -678,7 +678,7 @@ function readMp(req, res) { // NEED TO CLEAN THIS FUNC. NEED BETTER RESPONCE
       res.json({
         id : req.params.id,
         content: content,
-        author_id: form,
+        //author_id: form,
         options : options, 
         methode : req.method
       });
