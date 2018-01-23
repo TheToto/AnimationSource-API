@@ -27,7 +27,7 @@ router.route('/')
 router.route('/test')
 //POST
 .post(function(req,res){
-  test(req,res);
+  testConnect(req,res);
 })
 
 router.route('/mp')
@@ -542,7 +542,7 @@ function sendCommentProfile(req, res) {
   });
 }
 
-function test(req, res) {
+function testConnect(req, res) {
 
   var headers = {
     'User-Agent':       'Super Agent/0.0.1',
