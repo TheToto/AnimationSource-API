@@ -672,7 +672,7 @@ function readMp(req, res) { // NEED TO CLEAN THIS FUNC. NEED BETTER RESPONCE
       let reg2 = /From :(.*?)Date :(.*?)Subject :(.*?)Message :(.*?)<hr>/;
       let removeHTML = /<(?:.|\n)*?>/gm
 
-      let form = reg.exec($('form[name=pmsend]').attr('action'))[1];
+      //let form = reg.exec($('form[name=pmsend]').attr('action'))[1];
       let content = $('.content_important').parent().html();
 
       res.json({
