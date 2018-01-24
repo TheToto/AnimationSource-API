@@ -20,47 +20,41 @@ var router = express.Router();
 router.route('/')
 // GET
 .get(function(req,res){ 
-    res.json({message : "Get /", 
-    methode : req.method});
+    res.send('API AnimationSource.org');
 })
-//POST
-.post(function(req,res){
-      res.json({message : "Post /", 
-      methode : req.method});
-});
 
-router.route('/test')
+router.route('/test') // Test connection + return basic infos about user.
 //POST
 .post(function(req,res){
   connect.testConnect(req,res);
 })
 
-router.route('/mp')
+router.route('/mp') // Return MP list
 //POST
 .post(function(req,res){
   mp.getMp(req,res);
 })
 
-router.route('/mp/:id')
+router.route('/mp/:id') // Return the MP with :id
 //POST
 .post(function(req,res){
   mp.readMp(req,res);
 })
 
-router.route('/mp/send/:id') // SITE ID, NOT FORUM ID /!\
+router.route('/mp/send/:id') // Send a message to :id /!\ SITE ID, NOT FORUM ID /!\
 // The function will recup some ids and lang informations from the site (hidden input), and after, send the mp with the given message.
 //POST
 .post(function(req,res){
   mp.send(req,res);
 })
 
-router.route('/profile/:id')
+router.route('/profile/:id') // Return profile  :id
 // GET
 .get(function(req,res){ 
     profile.getAsProfile(req,res);
 })
 
-router.route('/profile/:id/comments')
+router.route('/profile/:id/comments') // GET : Return comments on profile :id, ?page // POST : Send ?comm comment on profile :id
 // GET
 .get(function(req,res){ 
     profile.getCommentProfile(req,res);
@@ -69,19 +63,20 @@ router.route('/profile/:id/comments')
     profile.sendCommentProfile(req,res);
 })
 
-router.route('/connect')
+router.route('/connect') // Return a PHPSESSID for futur use. A sort of API key lol. Param cookie is needed on all POST request.
 // POST user/pass
 .post(function(req,res){  
-    connect.connect(req,res); // Send a PHPSESSID for futur use. A sort of API key lol.
+    connect.connect(req,res);
 })
 
-router.route('/chat/:lang/active')
+router.route('/chat/:lang/active') // Return actives chats
 // GET
 .get(function(req,res){ 
     chat.getAsActiveChat(req,res);
 })
 
-router.route('/chat/:lang/:sitename/:chat')
+router.route('/chat/:lang/:sitename/:chat') // GET : Return the chat :sitename, :chat can be : 'chat', 'chat_shared' or 'chat_rpg' (sorry mods, you can't access to the mod chat.)
+                                            // POST : Send ?message to the chat :sitename
 // GET
 .get(function(req,res){ 
   chat.getAsChat(req, res);
@@ -91,7 +86,7 @@ router.route('/chat/:lang/:sitename/:chat')
   chat.sendAsChat(req,res);
 });
 
-router.route('/search/:lang/:sitename/:type/:subtype/:search')
+router.route('/search/:lang/:sitename/:type/:subtype/:search') // Search :search on :sitename. :type can be '...'. :sybtype can be 'object' or 'author'.
 // GET
 .get(function(req,res){ 
     search.search(req,res);
@@ -99,7 +94,7 @@ router.route('/search/:lang/:sitename/:type/:subtype/:search')
 
 
 
-router.route('/fanart/:lang/:sitename/')
+router.route('/fanart/:lang/:sitename/') // Get must_see and artist galleres (?page)
 // GET
 .get(function(req,res){ // req.query.page = The Page 
   fanart.main(req,res, 'art');
@@ -111,7 +106,7 @@ router.route('/fanimage/:lang/:sitename/')
   fanart.main(req,res, 'image');
 })
 
-router.route('/fanart/:lang/:sitename/:idartist/')
+router.route('/fanart/:lang/:sitename/:idartist/') // Get artist gallerie
 // GET
 .get(function(req,res){
   fanart.artist(req,res, 'art');
@@ -123,7 +118,7 @@ router.route('/fanimage/:lang/:sitename/:idartist/')
   fanart.artist(req,res, 'image');
 })
 
-router.route('/fanart/:lang/:sitename/:idartist/:id*?/comments')
+router.route('/fanart/:lang/:sitename/:idartist/:id*?/comments') // Get comments
 // GET
 .get(function(req,res){
   fanart.com(req,res, 'art');
@@ -141,7 +136,7 @@ router.route('/fanimage/:lang/:sitename/:idartist/:id*?/comments')
   fanart.sendcom(req,res, 'image');
 })
 
-router.route('/fanart/:lang/:sitename/:idartist/:id')
+router.route('/fanart/:lang/:sitename/:idartist/:id') // Get a fanart.
 // GET
 .get(function(req,res){
   fanart.view(req,res, 'art');
