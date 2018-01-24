@@ -8,7 +8,8 @@ const profile = require('./profile');
 const mp = require('./mp');
 const connect = require('./connect');
 const chat = require('./chat');
-const search = require('./search')
+const search = require('./search');
+const fanart = require('./fanart');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,6 +45,13 @@ router.route('/mp/:id')
 //POST
 .post(function(req,res){
   mp.readMp(req,res);
+})
+
+router.route('/mp/send/:id') // SITE ID, NOT FORUM ID /!\
+// The function will recup some ids and lang informations from the site (hidden input), and after, send the mp with the given message.
+//POST
+.post(function(req,res){
+  mp.send(req,res);
 })
 
 router.route('/profile/:id')
@@ -87,6 +95,79 @@ router.route('/search/:lang/:sitename/:type/:subtype/:search')
 // GET
 .get(function(req,res){ 
     search.search(req,res);
+})
+
+
+
+router.route('/fanart/:lang/:sitename/')
+// GET
+.get(function(req,res){ // req.query.page = The Page 
+  fanart.main(req,res, 'art');
+})
+
+router.route('/fanimage/:lang/:sitename/')
+// GET
+.get(function(req,res){ // req.query.page = The Page 
+  fanart.main(req,res, 'image');
+})
+
+router.route('/fanart/:lang/:sitename/:idartist/')
+// GET
+.get(function(req,res){
+  fanart.artist(req,res, 'art');
+})
+
+router.route('/fanimage/:lang/:sitename/:idartist/')
+// GET
+.get(function(req,res){
+  fanart.artist(req,res, 'image');
+})
+
+router.route('/fanart/:lang/:sitename/:idartist/:id*?/comments')
+// GET
+.get(function(req,res){
+  fanart.com(req,res, 'art');
+})
+.post(function(req,res){
+  fanart.sendcom(req,res, 'art');
+})
+
+router.route('/fanimage/:lang/:sitename/:idartist/:id*?/comments')
+// GET
+.get(function(req,res){
+  fanart.com(req,res, 'image');
+})
+.post(function(req,res){
+  fanart.sendcom(req,res, 'image');
+})
+
+router.route('/fanart/:lang/:sitename/:idartist/:id')
+// GET
+.get(function(req,res){
+  fanart.view(req,res, 'art');
+})
+
+router.route('/fanimage/:lang/:sitename/:idartist/:id')
+// GET
+.get(function(req,res){
+  fanart.view(req,res, 'image');
+})
+
+
+
+
+router.route('/fanfic/:lang/:sitename/')
+// GET
+.get(function(req,res){ // req.query.page = The Page 
+  //fanfic.main(req,res);
+  res.json({message : "Soon."});
+})
+
+router.route('/chars/:lang/:sitename/')
+// GET
+.get(function(req,res){ // req.query.page = The Page 
+  //chars.main(req,res);
+  res.json({message : "Soon."});
 })
 
 app.use(router);

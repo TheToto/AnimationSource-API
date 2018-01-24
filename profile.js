@@ -177,6 +177,7 @@ module.exports.sendCommentProfile = function (req, res) {
       console.log("ok");
     } else { 
       res.json({
+        confirm: false,
         error : "error request"
       });
     }

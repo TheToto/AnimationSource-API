@@ -23,9 +23,10 @@ module.exports.search = function (req, res) {
 
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
-      if ($('.emsg').length > 0) { // You have used the search engine a bit too much. This is a very ressource consuming process, so please wait 5 minutes before trying again.
+      if ($('.emsg').length > 0) {
         res.json({
           success: false,
+          error: "You have used the search engine a bit too much. This is a very ressource consuming process, so please wait 5 minutes before trying again.",
           type: req.params.type,
           subtype: req.params.subtype,
           result: [],

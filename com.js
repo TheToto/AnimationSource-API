@@ -10,7 +10,6 @@ module.exports.getCom = function ($, elem) {
     if (elem.tagName == "table" || elem.tagName == "br" || elem.tagName == "center" ) {} else {
 
       var id = $(this).children().first().attr('name').slice(6);
-      
       var date = $(this).find('span[itemprop*=datePublished]').first().text();
       var tmpp = $(this).find('.commenttable2').first();
       tmpp.find('img').replaceWith(function() { return $(this).attr("alt"); }) // Remove smileys
