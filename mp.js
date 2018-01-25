@@ -61,6 +61,69 @@ module.exports.getMp = function (req, res) {
   });
 }
 
+module.exports.readMp = function(req, res) { // NEED TO CLEAN THIS FUNC. NEED BETTER RESPONCE
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded',
+    'cookie' : req.body.cookie
+  }
+
+  var options = {
+    url: 'https://www.animationsource.org/hub/en/readmp/&read=' + req.params.id,
+    method: 'GET',
+    encoding: 'binary',
+    headers: headers,
+    form: { }
+  }
+  
+  request(options, function (error, response, body) {
+
+    if (!error && response.statusCode == 200) {
+      const $ = cheerio.load(body);
+
+      $('img').each(function(i, elem) {
+        if ($(this).attr('src').startsWith('/')) {
+          $(this).attr('src', "https://www.animationsource.org" + $(this).attr('src'));
+        }
+      });
+
+      let reg = /&to=([0-9]+)&/;
+      let reg2 = /From :([\s\S]*?)Date :([\s\S]*?)Subject :([\s\S]*?)Message : <\/span>([\s\S]*?)<hr>/; // Ugly regexp
+
+      let form = reg.exec($('form[name=pmsend]').attr('action'))[1];
+      let content = $('.content_important').parent().html();
+      
+      let regres = reg2.exec(content);
+
+
+      try {
+        res.json({
+          id : req.params.id,
+          author: regres[1].replace(/<[^>]*>|\t|\n/g, '').slice(1,-1), //Remove useless tags, spaces and tabs
+          date: regres[2].replace(/<[^>]*>|\t|\n/g, '').slice(1),
+          subject: regres[3].replace(/<[^>]*>|\t|\n/g, '').slice(1),
+          content: regres[4],
+          author_id: form,
+
+          options : options, 
+          methode : req.method
+        });
+      } catch (e) { 
+        res.json({
+          error : "error regexp"
+        });
+      }
+
+      console.log("ok");
+    } else { 
+      res.json({
+        error : "error request"
+      });
+    }
+  });
+}
+
+
 module.exports.send = function (req, res) {
 
   var headers = {
@@ -81,7 +144,7 @@ module.exports.send = function (req, res) {
 
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
-      
+
       let infos = {
         from: $('form[name=form1] > input[name=from]').val(),
         from_id: $('form[name=form1] > input[name=from_id]').val(),
