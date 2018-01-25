@@ -99,7 +99,7 @@ module.exports.readMp = function(req, res) { // NEED TO CLEAN THIS FUNC. NEED BE
       try {
         res.json({
           id : req.params.id,
-          author: regres[1].replace(/<[^>]*>|\t|\n/g, '').slice(1,-1), //Remove useless tags, spaces and tabs
+          author: regres[1].replace(/<[^>]*>|\t|\n/g, '').slice(1), //Remove useless tags, spaces and tabs
           date: regres[2].replace(/<[^>]*>|\t|\n/g, '').slice(1),
           subject: regres[3].replace(/<[^>]*>|\t|\n/g, '').slice(1),
           content: regres[4],

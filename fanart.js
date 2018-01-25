@@ -79,7 +79,7 @@ module.exports.main = function (req, res, type) {
         img = img.attr('src');
         artists[i] = {
           author: author,
-          authorid: authorid,
+          id: authorid,
           img: img
         }
       });
