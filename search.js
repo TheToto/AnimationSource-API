@@ -26,7 +26,7 @@ module.exports.search = function (req, res) {
       if ($('.emsg').length > 0) {
         res.json({
           success: false,
-          error: "You have used the search engine a bit too much. This is a very ressource consuming process, so please wait 5 minutes before trying again.",
+          error: $('.emsg').first().text(),
           type: req.params.type,
           subtype: req.params.subtype,
           result: [],
