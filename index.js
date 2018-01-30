@@ -51,7 +51,13 @@ router.route('/mp/send/:id') // Send a message to :id /!\ SITE ID, NOT FORUM ID 
 router.route('/profile/:id') // Return profile  :id
 // GET
 .get(function(req,res){ 
-    profile.getAsProfile(req,res);
+    profile.getAsProfile(req,res, 'en', 'hub');
+})
+
+router.route('/profile/:lang/:sitename/:id') // Return profile  :id
+// GET
+.get(function(req,res){ 
+    profile.getAsProfile(req,res, req.params.lang, req.params.sitename);
 })
 
 router.route('/profile/:id/comments') // GET : Return comments on profile :id, ?page // POST : Send ?comm comment on profile :id
