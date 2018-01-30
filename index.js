@@ -69,6 +69,15 @@ router.route('/profile/:id/comments') // GET : Return comments on profile :id, ?
     profile.sendCommentProfile(req,res);
 })
 
+router.route('/profile/:lang/:sitename/:id/comments') // GET : Return comments on profile :id, ?page // POST : Send ?comm comment on profile :id
+// GET
+.get(function(req,res){ 
+    profile.getCommentProfile(req,res);
+})
+.post(function(req,res){
+    profile.sendCommentProfile(req,res);
+})
+
 router.route('/connect') // Return a PHPSESSID for futur use. A sort of API key lol. Param cookie is needed on all POST request.
 // POST user/pass
 .post(function(req,res){  
