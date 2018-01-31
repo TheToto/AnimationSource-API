@@ -47,8 +47,15 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    var info = JSON.parse(body)
-    var i = setInterval(function(){
+    var info = JSON.parse(body);
+    client.query('SELECT id,title,author FROM news;', (err, res) => {
+      if (err) throw err;
+      for (let row of res.rows) {
+        console.log(JSON.stringify(row));
+      }
+      client.end();
+    });
+    /*var i = setInterval(function(){
       if (current > info.length) {
         clearInterval(i);
         return;
@@ -56,7 +63,7 @@ request(options, function (error, response, body) {
       console.log('Launch ' + current + ' : ' + info[current].id); 
       insert(info[current]); current++; 
     }, 1000);
-
+*/
   }
 });
 
