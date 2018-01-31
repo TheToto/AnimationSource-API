@@ -64,7 +64,7 @@ request(options, function (error, response, body) {
 
 function insert(e) {
 
-  const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
+  const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
   var img = e.img;
   if (e.img == undefined) {
     img = "http://";
