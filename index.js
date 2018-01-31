@@ -47,7 +47,14 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    setInterval(function(){ console.log('Launch ' + current + ' ' + body[current].id); insert(body[current]); current++; }, 5000);
+    var i = setInterval(function(){
+      if (current > body.length) {
+        clearInterval(i);
+        return;
+      }
+      console.log('Launch ' + current + ' ' + body[current].id); 
+      insert(body[current]); current++; 
+    }, 5000);
 
   }
 });
@@ -58,7 +65,7 @@ function insert(e) {
 
   const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
 
-  var values = [e.id, e.title, e.author, e.date, e.sitename, e.img, e.content];
+  var values = [e.id, e.title, e.author, e.date, e.site, e.img, e.content];
 
   client.query(text, values, (err, res) => {
     if (err) {
