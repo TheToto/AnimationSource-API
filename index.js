@@ -36,10 +36,6 @@ router.route('/news') // Test connection + return basic infos about user.
 .get(function(req,res){
   news.get(req,res);
 })
-//POST
-.post(function(req,res){
-  news.insert(req,res);
-})
 
 router.route('/mp') // Return MP list
 //POST

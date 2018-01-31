@@ -37,32 +37,3 @@ module.exports.get = function(req,res) {
     });
   });
 }
-
-module.exports.insert = function(req,res) {
-  let e = req.body;
-  const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
-  var img = e.img;
-  var date = e.date;
-  var title = e.title;
-  if (e.date == "Invalid date") {
-    date = 0;
-  }
-  if (e.img == undefined) {
-    img = "http://";
-  }
-  var values = [e.id, title, e.author, date, e.site, img, e.content];
-
-  client.query(text, values, (err, res) => {
-    if (err) {
-      res.json({
-        status : "error",
-        error: err.stack
-      });
-    } else {
-      res.json({
-        status : "ok",
-        row: res.rows[0]
-      });
-    }
-  });
-}
