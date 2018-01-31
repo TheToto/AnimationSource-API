@@ -1,12 +1,7 @@
 const request = require('request');
 const https = require("https");
 const express = require('express');
-const cheerio = require('cheerio');
 const bodyParser = require("body-parser"); 
-const { Client } = require('pg');
-const jsonfile = require('jsonfile');
-const Entities = require('html-entities').AllHtmlEntities;
-const entities = new Entities();
 
 const profile = require('./profile');
 const mp = require('./mp');
@@ -14,6 +9,7 @@ const connect = require('./connect');
 const chat = require('./chat');
 const search = require('./search');
 const fanart = require('./fanart');
+const news = require('./news');
 
 
 
@@ -22,65 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var router = express.Router(); 
 
-let current = 0;
-
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-
-client.connect();
-
-var headers = {
-  'User-Agent':       'Super Agent/0.0.1',
-  'Content-Type':     'application/x-www-form-urlencoded',
-  //'cookie' : req.body.cookie
-}
-
-var options = {
-  url: 'https://thetoto.tk/file.json',
-  method: 'GET',
-  encoding: 'utf8',
-  headers: headers,
-  form: { }
-}
-
-request(options, function (error, response, body) {
-
-  if (!error && response.statusCode == 200) {
-    console.log("File recup");
-    //insert(body);
-
-    var info = JSON.parse(body);
-    insert(info[0]); current++; 
-
-  }
-});
-
-
-
-function insert(e) {
-
-  const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
-  var img = e.img;
-  var date = e.date;
-  var title = e.title;
-  if (e.date == "Invalid date") {
-    date = 0;
-  }
-  if (e.img == undefined) {
-    img = "http://";
-  }
-  var values = [e.id, title, e.author, date, e.site, img, e.content];
-
-  client.query(text, values, (err, res) => {
-    if (err) {
-      console.log(err.stack)
-    } else {
-      console.log("OK " + res.rows[0].id);
-    }
-  });
-}
 
 router.route('/')
 // GET
@@ -92,6 +29,16 @@ router.route('/test') // Test connection + return basic infos about user.
 //POST
 .post(function(req,res){
   connect.testConnect(req,res);
+})
+
+router.route('/news') // Test connection + return basic infos about user.
+//GET
+.get(function(req,res){
+  news.get(req,res);
+})
+//POST
+.post(function(req,res){
+  news.insert(req,res);
 })
 
 router.route('/mp') // Return MP list
