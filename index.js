@@ -55,7 +55,7 @@ request(options, function (error, response, body) {
       }
       console.log('Launch ' + current + ' : ' + info[current].id); 
       insert(info[current]); current++; 
-    }, 5000);
+    }, 1000);
 
   }
 });
