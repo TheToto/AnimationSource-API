@@ -49,7 +49,7 @@ request(options, function (error, response, body) {
     //insert(body);
     var info = JSON.parse(body)
     var i = setInterval(function(){
-      if (current > body.length) {
+      if (current > info.length) {
         clearInterval(i);
         return;
       }
