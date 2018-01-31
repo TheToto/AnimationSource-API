@@ -52,7 +52,7 @@ client.connect();
 
 const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8)';
 
-myfile.forEach(function(e) {
+for (var e in myfile) {
   var values = [e.id, e.title, e.author, e.date, e.sitename, e.img, e.content];
 
   client.query(text, values, (err, res) => {
