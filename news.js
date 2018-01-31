@@ -21,7 +21,7 @@ module.exports.get = function(req,res) {
   }
   let offset = (page-1)*nb;
 
-  const sql = 'SELECT * FROM news ORDER BY id DESC LIMIT ' + nb + ' OFFSET' + offset;
+  const sql = 'SELECT * FROM news ORDER BY id DESC LIMIT ' + nb + ' OFFSET ' + offset +';';
   console.log(sql);
   client.query(sql, (err, resu) => {
     if (err) {
