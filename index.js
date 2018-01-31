@@ -78,6 +78,7 @@ function insert(e) {
   var img = e.img;
   var date = e.date;
   var title = entities.encodeNonASCII(e.title);
+  console.log(title);
   if (e.date == "Invalid date") {
     date = 0;
   }
@@ -90,7 +91,7 @@ function insert(e) {
     if (err) {
       console.log(err.stack)
     } else {
-      console.log("OK " + res.rows[0].id)
+      console.log("OK " + res.rows[0].id + res.rows[0].title)
     }
   });
 }
