@@ -67,7 +67,7 @@ function insert(e) {
   const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
   var img = e.img;
   if (e.img == undefined) {
-    img = NULL;
+    img = null;
   }
   var values = [e.id, e.title, e.author, e.date, e.site, img, e.content];
 
