@@ -41,15 +41,6 @@ var options = {
   form: { }
 }
 
-request(options, function (error, response, body) {
-
-  if (!error && response.statusCode == 200) {
-    console.log("File recup");
-    //insert(body);
-    test();
-  }
-});
-
 function test() {
   client.query('SELECT * FROM news;', (err, res) => {
     if (err) throw err;
@@ -60,9 +51,20 @@ function test() {
   });
 }
 
+request(options, function (error, response, body) {
+
+  if (!error && response.statusCode == 200) {
+    console.log("File recup");
+    //insert(body);
+    test();
+  }
+});
+
+
+
 function insert(myfile) {
 
-const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8)';
+const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
 
 for (var e in myfile) {
   var values = [e.id, e.title, e.author, e.date, e.sitename, e.img, e.content];
