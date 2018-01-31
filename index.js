@@ -52,7 +52,6 @@ request(options, function (error, response, body) {
     //insert(body);
 
     var info = JSON.parse(body);
-    console.log(info[0]);
     /*client.query('SELECT id,title,author FROM news;', (err, res) => {
       if (err) throw err;
       for (let row of res.rows) {
@@ -67,7 +66,7 @@ request(options, function (error, response, body) {
       }
       console.log('Launch ' + current + ' : ' + info[current].id); 
       insert(info[current]); current++; 
-    }, 1000);
+    }, 200);
 
   }
 });
