@@ -47,7 +47,7 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    console.log(body[0]);
+    console.log(body);
     var i = setInterval(function(){
       if (current > body.length) {
         clearInterval(i);
