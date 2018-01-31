@@ -41,22 +41,18 @@ var options = {
   form: { }
 }
 
-function test() {
-  client.query('SELECT * FROM news;', (err, res) => {
-    if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-    client.end();
-  });
-}
-
 request(options, function (error, response, body) {
 
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    test();
+    client.query('SELECT * FROM news;', (err, res) => {
+      if (err) throw err;
+      for (let row of res.rows) {
+        console.log(JSON.stringify(row));
+      }
+      client.end();
+    });
   }
 });
 
