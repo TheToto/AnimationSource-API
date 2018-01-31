@@ -47,14 +47,14 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    console.log(body);
+    var info = JSON.parse(body)
     var i = setInterval(function(){
       if (current > body.length) {
         clearInterval(i);
         return;
       }
-      console.log('Launch ' + current + ' ' + body[current].id); 
-      insert(body[current]); current++; 
+      console.log('Launch ' + current + ' : ' + info[current].id); 
+      insert(info[current]); current++; 
     }, 5000);
 
   }
