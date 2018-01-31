@@ -3,6 +3,10 @@ const https = require("https");
 const express = require('express');
 const cheerio = require('cheerio');
 const bodyParser = require("body-parser"); 
+const { Client } = require('pg');
+const jsonfile = require('jsonfile');
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 
 const profile = require('./profile');
 const mp = require('./mp');
@@ -10,8 +14,7 @@ const connect = require('./connect');
 const chat = require('./chat');
 const search = require('./search');
 const fanart = require('./fanart');
-const { Client } = require('pg');
-const jsonfile = require('jsonfile');
+
 
 
 const app = express();
@@ -74,13 +77,14 @@ function insert(e) {
   const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
   var img = e.img;
   var date = e.date;
+  var title = entities.encodeNonASCII(e.title);
   if (e.date == "Invalid date") {
     date = 0;
   }
   if (e.img == undefined) {
     img = "http://";
   }
-  var values = [e.id, e.title, e.author, date, e.site, img, e.content];
+  var values = [e.id, title, e.author, date, e.site, img, e.content];
 
   client.query(text, values, (err, res) => {
     if (err) {
