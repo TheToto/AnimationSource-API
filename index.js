@@ -10,12 +10,63 @@ const connect = require('./connect');
 const chat = require('./chat');
 const search = require('./search');
 const fanart = require('./fanart');
+const { Client } = require('pg');
+const jsonfile = require('jsonfile');
+
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var router = express.Router(); 
 
+var headers = {
+  'User-Agent':       'Super Agent/0.0.1',
+  'Content-Type':     'application/x-www-form-urlencoded',
+  //'cookie' : req.body.cookie
+}
+
+var options = {
+  url: 'https://thetoto.tk/file.json',
+  method: 'GET',
+  encoding: 'binary',
+  headers: headers,
+  form: { }
+}
+
+request(options, function (error, response, body) {
+
+  if (!error && response.statusCode == 200) {
+    console.log("File recup");
+    insert(body);
+  }
+});
+
+
+function insert(myfile) {
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
+
+const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8)';
+
+myfile.forEach(function(e) {
+  var values = [e.id, e.title, e.author, e.date, e.sitename, e.img, e.content];
+
+  client.query(text, values, (err, res) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+      console.log(res.rows[0])
+      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+    }
+  
+  });
+});
+
+}
 
 router.route('/')
 // GET
