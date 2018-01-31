@@ -40,7 +40,7 @@ var headers = {
 var options = {
   url: 'https://thetoto.tk/file.json',
   method: 'GET',
-  encoding: 'binary',
+  encoding: 'utf8',
   headers: headers,
   form: { }
 }
@@ -50,7 +50,9 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
+
     var info = JSON.parse(body);
+    console.log(info[0]);
     /*client.query('SELECT id,title,author FROM news;', (err, res) => {
       if (err) throw err;
       for (let row of res.rows) {
@@ -77,8 +79,7 @@ function insert(e) {
   const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
   var img = e.img;
   var date = e.date;
-  var title = entities.encodeNonASCII(e.title);
-  console.log(title);
+  var title = e.title;
   if (e.date == "Invalid date") {
     date = 0;
   }
@@ -91,7 +92,7 @@ function insert(e) {
     if (err) {
       console.log(err.stack)
     } else {
-      console.log("OK " + res.rows[0].id + res.rows[0].title)
+      console.log("OK " + res.rows[0].id);
     }
   });
 }
