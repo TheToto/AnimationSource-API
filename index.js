@@ -47,7 +47,7 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    setInterval(function(){ console.log('Launch ' + current + ' ' + myfile[current].id); insert(myfile[current]); current++; }, 5000);
+    setInterval(function(){ console.log('Launch ' + current + ' ' + body[current].id); insert(body[current]); current++; }, 5000);
 
   }
 });
