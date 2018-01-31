@@ -64,7 +64,7 @@ for (var e in myfile) {
     }
   
   });
-});
+};
 
 }
 
