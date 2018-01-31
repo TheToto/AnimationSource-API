@@ -19,6 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var router = express.Router(); 
 
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
+
 var headers = {
   'User-Agent':       'Super Agent/0.0.1',
   'Content-Type':     'application/x-www-form-urlencoded',
@@ -37,18 +45,22 @@ request(options, function (error, response, body) {
 
   if (!error && response.statusCode == 200) {
     console.log("File recup");
-    insert(body);
+    //insert(body);
+    test();
   }
 });
 
+function test() {
+  client.query('SELECT * FROM news;', (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+      console.log(JSON.stringify(row));
+    }
+    client.end();
+  });
+}
 
 function insert(myfile) {
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-
-client.connect();
 
 const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8)';
 
