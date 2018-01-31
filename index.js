@@ -66,10 +66,14 @@ function insert(e) {
 
   const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *';
   var img = e.img;
+  var date = e.date;
+  if (e.date == "Invalid date") {
+    date = 0;
+  }
   if (e.img == undefined) {
     img = "http://";
   }
-  var values = [e.id, e.title, e.author, e.date, e.site, img, e.content];
+  var values = [e.id, e.title, e.author, date, e.site, img, e.content];
 
   client.query(text, values, (err, res) => {
     if (err) {
