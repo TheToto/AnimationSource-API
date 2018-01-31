@@ -65,16 +65,19 @@ request(options, function (error, response, body) {
 function insert(e) {
 
   const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
+  var img = e.img;
+  if (e.img == undefined) {
+    img = NULL;
+  }
+  var values = [e.id, e.title, e.author, e.date, e.site, img, e.content];
 
-  var values = [e.id, e.title, e.author, e.date, e.site, e.img, e.content];
-  console.log(values);
-  /*client.query(text, values, (err, res) => {
+  client.query(text, values, (err, res) => {
     if (err) {
       console.log(err.stack)
     } else {
-      console.log(res.rows[0])
+      console.log("OK " + res.rows[0].id)
     }
-  });*/
+  });
 }
 
 router.route('/')
