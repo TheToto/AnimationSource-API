@@ -47,6 +47,7 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
+    console.log(body[0]);
     var i = setInterval(function(){
       if (current > body.length) {
         clearInterval(i);
@@ -63,17 +64,17 @@ request(options, function (error, response, body) {
 
 function insert(e) {
 
-  const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
+  const text = 'INSERT INTO news(id, title, author, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
 
   var values = [e.id, e.title, e.author, e.date, e.site, e.img, e.content];
-
-  client.query(text, values, (err, res) => {
+  console.log(values);
+  /*client.query(text, values, (err, res) => {
     if (err) {
       console.log(err.stack)
     } else {
       console.log(res.rows[0])
     }
-  });
+  });*/
 }
 
 router.route('/')
