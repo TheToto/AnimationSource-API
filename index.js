@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var router = express.Router(); 
 
+let current = 0;
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -46,23 +47,17 @@ request(options, function (error, response, body) {
   if (!error && response.statusCode == 200) {
     console.log("File recup");
     //insert(body);
-    client.query('SELECT * FROM news;', (err, res) => {
-      if (err) throw err;
-      for (let row of res.rows) {
-        console.log(JSON.stringify(row));
-      }
-      client.end();
-    });
+    setInterval(function(){ console.log('Launch ' + current + ' ' + myfile[current].id); insert(myfile[current]); current++; }, 5000);
+
   }
 });
 
 
 
-function insert(myfile) {
+function insert(e) {
 
-const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
+  const text = 'INSERT INTO news(id, title, auhtor, date, sitename, img, content) VALUES($1, $2, $3, $4, $5, $6, $8) RETURNING *';
 
-for (var e in myfile) {
   var values = [e.id, e.title, e.author, e.date, e.sitename, e.img, e.content];
 
   client.query(text, values, (err, res) => {
@@ -70,12 +65,8 @@ for (var e in myfile) {
       console.log(err.stack)
     } else {
       console.log(res.rows[0])
-      // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
     }
-  
   });
-};
-
 }
 
 router.route('/')
