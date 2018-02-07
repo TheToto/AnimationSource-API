@@ -9,6 +9,7 @@ const connect = require('./connect');
 const chat = require('./chat');
 const search = require('./search');
 const fanart = require('./fanart');
+const fanfic = require('./fanfic');
 const news = require('./news');
 
 
@@ -115,8 +116,6 @@ router.route('/search/:lang/:sitename/:type/:subtype/:search') // Search :search
     search.search(req,res);
 })
 
-
-
 router.route('/fanart/:lang/:sitename/') // Get must_see and artist galleres (?page)
 // GET
 .get(function(req,res){ // req.query.page = The Page 
@@ -172,13 +171,25 @@ router.route('/fanimage/:lang/:sitename/:idartist/:id')
 })
 
 
-
-
-router.route('/fanfic/:lang/:sitename/')
+router.route('/fan:type/:lang/:sitename/')
 // GET
-.get(function(req,res){ // req.query.page = The Page 
-  //fanfic.main(req,res);
-  res.json({message : "Soon."});
+.get(function(req,res){
+  fanfic.main(req,res, req.params.type);
+})
+
+router.route('/fan:type/:lang/:sitename/:idartist/')
+// GET
+.get(function(req,res){
+  fanfic.artist(req,res, req.params.type);
+})
+
+router.route('/fan:type/:lang/:sitename/:idartist/:id*?/comments')
+// GET
+.get(function(req,res){
+  fanfic.com(req,res, req.params.type);
+})
+.post(function(req,res){
+  fanfic.sendcom(req,res, req.params.type);
 })
 
 router.route('/chars/:lang/:sitename/')
