@@ -85,8 +85,8 @@ module.exports.main = function (req, res, type) {
       $(sel).children().each(function(i,e) {
         let taga = $(this).children().first();
         let id = taga.attr('href');
-        if (type != 'music')
-          id = reg.exec(taga.attr('href'))[1];
+        //if (type != 'music')
+        //  id = reg.exec(taga.attr('href'))[1];
           
         recent[i] = {
           id: id,
