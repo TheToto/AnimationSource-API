@@ -42,6 +42,13 @@ router.route('/news/:id') // Test connection + return basic infos about user.
 .get(function(req,res){
   news.one(req,res);
 })
+router.route('/news/:id/comments') // Test connection + return basic infos about user.
+.get(function(req,res){
+  news.com(req,res);
+})
+.post(function(req,res){
+  news.sendcom(req,res);
+})
 
 router.route('/mp') // Return MP list
 //POST

@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const { Client } = require('pg');
 const jsonfile = require('jsonfile');
 
+const com = require('./com');
+
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: true,
@@ -61,5 +63,98 @@ module.exports.one = function(req,res) {
       status : "ok",
       news: resu.rows[0]
     });
+  });
+}
+
+module.exports.com = function (req, res, type) {
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded'
+    //'cookie' : 'PHPSESSID=utbcfdvakjq4oua4c3pmk9ucf7'
+  }
+
+  var deb;
+  if (req.query.page && req.query.page > 1) {
+    deb = 10 + (req.query.page-2) * 30;
+  } else {
+    deb = 0;
+  }
+  let url;
+  url = 'https://www.animationsource.org/petit_poney/fr/comments/' + '/&numg='+ req.params.id;
+  var options = {
+    url: url,
+    method: 'GET',
+    encoding: 'binary',
+    headers: headers
+  }
+  
+  request(options, function (error, response, body) {
+
+
+    if (!error && response.statusCode == 200) {
+      const $ = cheerio.load(body);
+      //res.send(body);
+      var main;
+      let sel;
+      if (deb == 0) {
+        if (req.params.lang == 'en')
+          sel = '#last_comments';
+        else 
+          sel = '#derniers_commentaires';
+      } else {
+        if (req.params.lang == 'en')
+          sel = '#comments';
+        else
+          sel = '#commentaires';
+      }
+      res.json({
+        main:  com.getCom($, $(sel)),
+        options : options, 
+        methode : req.method
+      });
+      console.log("ok");
+    } else { 
+      res.json({
+        error : "error request"
+      });
+    }
+  });
+}
+
+module.exports.sendcom = function (req, res, type) {
+
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded',
+    'cookie' : req.body.cookie
+  }
+  let url;
+  url = 'https://www.animationsource.org/petit_poney/fr/comments/' + '/&numg='+ req.params.id;
+  var options = {
+    url: url + '&dopost=1',
+    method: 'POST',
+    encoding: 'binary',
+    headers: headers,
+    form: {
+      'comm': req.body.comm,
+    }
+  }
+  
+  request(options, function (error, response, body) {
+
+    if (!error && response.statusCode == 200) {
+      //res.send(body);
+      res.json({
+        confirm : true,
+        options : options, 
+        methode : req.method
+      });
+      console.log("ok");
+    } else { 
+      res.json({
+        confirm: false,
+        error : "error request"
+      });
+    }
   });
 }
