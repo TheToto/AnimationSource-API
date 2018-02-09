@@ -50,6 +50,13 @@ module.exports.one = function(req,res) {
       });
       return;
     }
+    const $2 = cheerio.load(resu.rows[0].content);
+    $2('img').each(function(i, elem) {
+      if ($2(this).attr('src').startsWith('/')) {
+        $2(this).attr('src', "https://www.animationsource.org" + $2(this).attr('src'));
+      }
+    });
+    resu.rows[0].content = $2.html();
     res.json({
       status : "ok",
       news: resu.rows[0]
