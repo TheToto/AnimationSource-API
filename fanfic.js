@@ -53,7 +53,7 @@ module.exports.main = function (req, res, type) {
       let bool = true;
       var reg = /\/([0-9]+).html/;
       $(sel).find('span > a').each(function(i,e) {
-        let fanid = reg.exec($(this).attr('href'))[1];
+        let fanid = /*reg.exec($(this).attr('href'))[1];*/$(this).attr('href');
         let title = $(this).children().first().text();
         must_see[i] = {
           id: fanid,
@@ -157,9 +157,9 @@ module.exports.artist = function (req, res, type) {
       $(sel).each(function(i,elem) {
         $(this).children().last().find('img[src="images/shared/book.gif"]').replaceWith('X');
         let id = $(this).attr('href');
-        if (type != 'music') {
-          id = reg.exec($(this).attr('href'))[1];
-        }
+        //if (type != 'music') {
+        //  id = reg.exec($(this).attr('href'))[1];
+        //}
         
         obj[i] = {
           name: $(this).find('.content_important').text(),
