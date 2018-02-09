@@ -75,12 +75,12 @@ module.exports.com = function (req, res, type) {
 
   var deb;
   if (req.query.page && req.query.page > 1) {
-    deb = 10 + (req.query.page-2) * 30;
+    deb = 10 + (req.query.page-2) * 10;
   } else {
     deb = 0;
   }
   let url;
-  url = 'https://www.animationsource.org/petit_poney/fr/comments/' + '/&numg='+ req.params.id;
+  url = 'https://www.animationsource.org/petit_poney/fr/comments/' + '/&numg='+ req.params.id + '&deb_comm=' + deb;
   var options = {
     url: url,
     method: 'GET',
