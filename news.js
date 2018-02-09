@@ -21,7 +21,7 @@ module.exports.get = function(req,res) {
   }
   let offset = (page-1)*nb;
 
-  const sql = 'SELECT * FROM news ORDER BY id DESC LIMIT ' + nb + ' OFFSET ' + offset +';';
+  const sql = 'SELECT id,sitename,date,title,img,author FROM news ORDER BY id DESC LIMIT ' + nb + ' OFFSET ' + offset +';';
   console.log(sql);
   client.query(sql, (err, resu) => {
     if (err) {
@@ -34,6 +34,25 @@ module.exports.get = function(req,res) {
     res.json({
       status : "ok",
       news: resu.rows
+    });
+  });
+}
+
+module.exports.one = function(req,res) {
+
+  const sql = 'SELECT * FROM news WHERE id=' + req.params.id +';';
+  console.log(sql);
+  client.query(sql, (err, resu) => {
+    if (err) {
+      res.json({
+        status : "error",
+        error: err
+      });
+      return;
+    }
+    res.json({
+      status : "ok",
+      news: resu.rows[0]
     });
   });
 }
