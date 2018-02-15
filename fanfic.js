@@ -189,54 +189,6 @@ module.exports.artist = function (req, res, type) {
   });
 }
 
-module.exports.view = function (req, res, type) {
-  var headers = {
-    'User-Agent':       'Super Agent/0.0.1',
-    'Content-Type':     'application/x-www-form-urlencoded',
-    //'cookie' : req.body.cookie
-  }
-
-  var options = {
-    url: 'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/view_fan' + type + '/&numg='+ req.params.id + '&numart=' + req.params.idartist,
-    method: 'GET',
-    encoding: 'binary',
-    headers: headers,
-    form: { }
-  }
-  
-  request(options, function (error, response, body) {
-
-    if (!error && response.statusCode == 200) {
-      const $ = cheerio.load(body);
-
-      let img = $('body > div >img');
-      let title = img.attr('title');
-      let desc = $('.descr').text();
-      let sel = "div[id$=global] div[id*=_20] > table";
-
-      let com_sel;
-      if (req.params.lang == 'fr') {
-        com_sel = '#derniers_commentaires';
-      } else {
-        com_sel = '#last_comments';
-      }
-      res.json({
-        title: title,
-        desc: desc,
-        img: img.attr('src'),
-        comment: com.getCom($,$(com_sel)),
-        options : options, 
-        methode : req.method
-      });
-      console.log("ok");
-    } else { 
-      res.json({
-        options: options,
-        error : "error request"
-      });
-    }
-  });
-}
 
 module.exports.com = function (req, res, type) {
   var headers = {

@@ -11,6 +11,7 @@ const search = require('./search');
 const fanart = require('./fanart');
 const fanfic = require('./fanfic');
 const news = require('./news');
+const other = require('./other');
 
 
 
@@ -183,7 +184,7 @@ router.route('/fanimage/:lang/:sitename/:idartist/:id')
 })
 
 
-router.route('/fan:type/:lang/:sitename/')
+router.route('/fan:type/:lang/:sitename/') // Fanfic,musics,videos,game books.
 // GET
 .get(function(req,res){
   fanfic.main(req,res, req.params.type);
@@ -197,18 +198,30 @@ router.route('/fan:type/:lang/:sitename/:idartist/')
 
 router.route('/fan:type/:lang/:sitename/:idartist/:id*?/comments')
 // GET
-.get(function(req,res){
+.get(function(req,res) {
   fanfic.com(req,res, req.params.type);
 })
-.post(function(req,res){
+.post(function(req,res) {
   fanfic.sendcom(req,res, req.params.type);
 })
 
 router.route('/chars/:lang/:sitename/')
 // GET
-.get(function(req,res){ // req.query.page = The Page 
+.get(function(req,res) { // req.query.page = The Page 
   //chars.main(req,res);
   res.json({message : "Soon."});
+})
+
+router.route('/custom/')
+// GET
+.post(function(req,res) {
+  other.custom(req,res);
+})
+
+router.route('/sitemap/:lang/:sitename')
+// GET
+.get(function(req,res) {
+  other.sitemap(req,res);
 })
 
 app.use(router);
