@@ -37,10 +37,17 @@ module.exports.custom = function (req, res) {
           content: $('div[itemprop="articleBody"]').html(),
         }
       }
-
+      let tabs = {};
+      $('.td_ong').each(function(i,e) {
+        tabs[i] = {
+          title:$(this).text(),
+          url:$(this).parent().attr('href')
+        }
+      });
 
       res.json({
         success: success,
+        tabs: tabs,
         infos: infos,
         options : options, 
         methode : req.method
@@ -87,11 +94,13 @@ module.exports.sitemap = function (req, res) {
             title: $(this).find('span').text(),
           }
         });
-        menu[i] = { 
-          title: $(this).children().first().attr('title'),
-          img: "https://www.animationsource.org/" + img,
-          id: id,
-          children: children
+        if (children.length > 0) {
+          menu.push({  
+            title: $(this).children().first().attr('title'),
+            img: "https://www.animationsource.org/" + img,
+            id: id,
+            children: children
+          });
         }
       });
 
