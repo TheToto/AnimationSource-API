@@ -56,8 +56,10 @@ router.route('/notif')
   updates['/users/' + newUserKey] = postData;
   firebase.database().ref().update(updates);
   res.send("Seems ok.");
-})
-.get(function(req,res){
+});
+
+router.route('notif/send')
+.post(function(req,res){
   firebase.database().ref('users/').on('value', (snapshot) => {
     const users = snapshot.val();
 
@@ -66,8 +68,8 @@ router.route('/notif')
       if( users.hasOwnProperty(p) ) {
         query.push({
           'to': users[p].token,
-          'title': req.query.title,
-          'body': req.query.body
+          'title': req.body.title,
+          'body': req.body.body
         });
         
       } 
