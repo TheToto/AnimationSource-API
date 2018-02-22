@@ -66,7 +66,8 @@ router.route('/notif')
       if( users.hasOwnProperty(p) ) {
         query.push({
           'to': users[p].token,
-          'body': "Test notif !!"
+          'title': req.query.title,
+          'body': req.query.body
         });
         
       } 
