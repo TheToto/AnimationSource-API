@@ -2,6 +2,10 @@ const request = require('request');
 const https = require("https");
 const express = require('express');
 const bodyParser = require("body-parser"); 
+const firebase = require('firebase');
+
+const Expo = require('expo-server-sdk');
+let expo = new Expo();
 
 const profile = require('./profile');
 const mp = require('./mp');
@@ -20,6 +24,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 var router = express.Router(); 
 
+var config = {
+  apiKey: "AIzaSyAAUpwhjyLVNr4lfQ2ffi7treBKsApx7Fc",
+  authDomain: "as-app-d9d7f.firebaseapp.com",
+  databaseURL: "https://as-app-d9d7f.firebaseio.com",
+  projectId: "as-app-d9d7f",
+  storageBucket: "as-app-d9d7f.appspot.com",
+  messagingSenderId: "625654127792"
+};
+firebase.initializeApp(config);
 
 router.route('/')
 // GET
@@ -32,6 +45,47 @@ router.route('/test') // Test connection + return basic infos about user.
 .post(function(req,res){
   connect.testConnect(req,res);
 })
+
+router.route('/notif')
+.post(function(req,res){
+  var newUserKey = firebase.database().ref().child('users').push().key;
+  console.log(req.body);
+  var postData = {token: req.body.token};
+
+  var updates = {};
+  updates['/users/' + newUserKey] = postData;
+  firebase.database().ref().update(updates);
+  res.send("Seems ok.");
+})
+.get(function(req,res){
+  firebase.database().ref('users/').on('value', (snapshot) => {
+    const users = snapshot.val();
+
+    let query = [];
+    for (var p in users) {
+      if( users.hasOwnProperty(p) ) {
+        query.push({
+          'to': users[p].token,
+          'body': "Test notif !!"
+        });
+        
+      } 
+    }         
+    console.log(query);
+    let chunks = expo.chunkPushNotifications(query);
+    (async () => {
+      for (let chunk of chunks) {
+        try {
+          let receipts = await expo.sendPushNotificationsAsync(chunk);
+          res.send(receipts);
+        } catch (error) {
+          res.send(error);
+        }
+      }
+    })();   
+    
+  });
+});
 
 router.route('/news') // Test connection + return basic infos about user.
 //GET

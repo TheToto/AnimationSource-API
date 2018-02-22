@@ -19,7 +19,9 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
+    "expo-server-sdk": "^2.3.3",
     "express": "^4.16.2",
+    "firebase": "^4.10.0",
     "html-entities": "^1.2.1",
     "jsonfile": "^4.0.0",
     "moment": "^2.20.1",
