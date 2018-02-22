@@ -58,7 +58,7 @@ router.route('/notif')
   res.send("Seems ok.");
 });
 
-router.route('notif/send')
+router.route('/notif/send')
 .post(function(req,res){
   firebase.database().ref('users/').on('value', (snapshot) => {
     const users = snapshot.val();
