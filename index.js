@@ -36,6 +36,11 @@ router.route('/notif')
   notif.register(req,res);
 });
 
+router.route('/notif/remove')
+.post(function(req,res){
+  notif.remove(req,res);
+});
+
 router.route('/notif/send')
 .post(function(req,res){
   notif.sendAll(req,res);

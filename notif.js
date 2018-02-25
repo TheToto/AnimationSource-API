@@ -20,7 +20,6 @@ firebase.initializeApp(config);
 module.exports.register = function(req,res) {
   var reg = /\[([A-Za-z0-9-_]*)\]/;
 
-  var newUserKey = firebase.database().ref().child('users').push().key;
   console.log(req.body);
   var postData = {};
   var id = reg.exec(req.body.token)[1];
@@ -33,7 +32,7 @@ module.exports.register = function(req,res) {
 }
 
 module.exports.remove = function(req,res) {
-  var reg = /\[[A-Za-z0-9-_]*\]/;
+  var reg = /\[([A-Za-z0-9-_]*)\]/;
   var id = reg.exec(req.body.token)[1];
   var toDelete = firebase.database().ref().child('users').child(id);
   toDelete.remove();
