@@ -25,7 +25,7 @@ module.exports.register = function(req,res) {
   var postData = {};
   var id = reg.exec(req.body.token)[1];
   postData["token"] = req.body.token;
-  console.log(id);
+  console.log(reg.exec(req.body.token));
   var updates = {};
   updates['/users/' + id] = postData;
   firebase.database().ref().update(updates);
