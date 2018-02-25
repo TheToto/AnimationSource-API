@@ -25,7 +25,7 @@ module.exports.register = function(req,res) {
   var postData = {};
   var id = reg.exec(req.body.token)[1];
   postData["token"] = req.body.token;
-
+  console.log(id);
   var updates = {};
   updates['/users/' + id] = postData;
   firebase.database().ref().update(updates);
@@ -33,7 +33,10 @@ module.exports.register = function(req,res) {
 }
 
 module.exports.remove = function(req,res) {
-  var toDelete = firebase.database().ref().child('users').child(req.body.token);
+  var reg = /\[[A-Za-z0-9-_]*\]/;
+  var id = reg.exec(req.body.token)[1];
+  var toDelete = firebase.database().ref().child('users').child(id);
+  toDelete.remove();
 }
 
 module.exports.sendAll = function(req,res) {
