@@ -18,7 +18,7 @@ var config = {
 firebase.initializeApp(config);
 
 module.exports.register = function(req,res) {
-  var reg = /\[[A-Za-z]*\]/;
+  var reg = /\[[A-Za-z0-9]*\]/;
 
   var newUserKey = firebase.database().ref().child('users').push().key;
   console.log(req.body);
