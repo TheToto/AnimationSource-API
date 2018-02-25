@@ -18,15 +18,22 @@ var config = {
 firebase.initializeApp(config);
 
 module.exports.register = function(req,res) {
+  var reg = /\[[A-Za-z]*\]/;
+
   var newUserKey = firebase.database().ref().child('users').push().key;
   console.log(req.body);
   var postData = {};
-  postData[req.body.token] = req.body.token;
+  var id = reg.exec(req.body.token)[1];
+  postData["token"] = req.body.token;
 
   var updates = {};
-  updates['/users/' + newUserKey] = postData;
+  updates['/users/' + id] = postData;
   firebase.database().ref().update(updates);
   res.send("Seems ok.");
+}
+
+module.exports.remove = function(req,res) {
+  var toDelete = firebase.database().ref().child('users').child(req.body.token);
 }
 
 module.exports.sendAll = function(req,res) {
