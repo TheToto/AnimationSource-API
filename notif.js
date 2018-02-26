@@ -8,7 +8,7 @@ const Expo = require('expo-server-sdk');
 let expo = new Expo();
 
 var firebase = require('firebase-admin');
-console.log(process.env.firebase_admin);
+console.log(JSON.parse(process.env.firebase_admin).private_key_id);
 firebase.initializeApp({
   credential: firebase.credential.cert(JSON.parse(process.env.firebase_admin)),
   databaseURL: 'https://as-app-d9d7f.firebaseio.com'
