@@ -37,7 +37,7 @@ module.exports.custom = function (req, res) {
           content: $('div[itemprop="articleBody"]').html(),
         }
       }
-      let tabs = {};
+      let tabs = [];
       $('.td_ong').each(function(i,e) {
         tabs[i] = {
           title:$(this).text(),

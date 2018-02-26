@@ -31,32 +31,42 @@ router.route('/test') // Test connection + return basic infos about user.
   connect.testConnect(req,res);
 })
 
-router.route('/notif')
+router.route('/notif') // Register to receive NEWS notifs
 .post(function(req,res){
   notif.register(req,res);
 });
 
-router.route('/notif/remove')
+router.route('/notif/new') // Get unreded notifs
+.post(function(req,res){
+  notif.getNew(req,res);
+});
+
+router.route('/notif/old') // Get readed notifs
+.post(function(req,res){
+  notif.getOld(req,res);
+});
+
+router.route('/notif/remove') // Remove a notif
 .post(function(req,res){
   notif.remove(req,res);
 });
 
-router.route('/notif/send')
+router.route('/notif/send') // send a notif to all users (TEMPORAIRE)
 .post(function(req,res){
   notif.sendAll(req,res);
 });
 
-router.route('/news') // Test connection + return basic infos about user.
+router.route('/news')
 //GET
 .get(function(req,res){
   news.get(req,res);
 })
-router.route('/news/:id') // Test connection + return basic infos about user.
+router.route('/news/:id')
 //GET
 .get(function(req,res){
   news.one(req,res);
 })
-router.route('/news/:id/comments') // Test connection + return basic infos about user.
+router.route('/news/:id/comments')
 .get(function(req,res){
   news.com(req,res);
 })

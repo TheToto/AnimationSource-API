@@ -1,21 +1,131 @@
 const request = require('request');
 const https = require("https");
 const express = require('express');
+const cheerio = require('cheerio');
 const bodyParser = require("body-parser"); 
-const firebase = require('firebase');
 
 const Expo = require('expo-server-sdk');
 let expo = new Expo();
 
-var config = {
-  apiKey: "AIzaSyAAUpwhjyLVNr4lfQ2ffi7treBKsApx7Fc",
-  authDomain: "as-app-d9d7f.firebaseapp.com",
-  databaseURL: "https://as-app-d9d7f.firebaseio.com",
-  projectId: "as-app-d9d7f",
-  storageBucket: "as-app-d9d7f.appspot.com",
-  messagingSenderId: "625654127792"
-};
-firebase.initializeApp(config);
+var firebase = require('firebase-admin');
+console.log(process.env.firebase_admin);
+firebase.initializeApp({
+  credential: firebase.credential.cert(JSON.parse(process.env.firebase_admin)),
+  databaseURL: 'https://as-app-d9d7f.firebaseio.com'
+});
+
+
+module.exports.getNew = function(req,res) {
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded',
+    'cookie' : req.body.cookie
+  }
+  let url = "https://www.animationsource.org/engine/ajax/ajax_php_function_call.php";
+  var options = {
+    url: url,
+    method: 'POST',
+    encoding: 'binary',
+    headers: headers,
+    form: {
+      script_name: "func_support",
+      php_function_name: "ajaxNotifDisplay",
+      sitename: "hub",
+      lang:1
+    }
+  }
+  
+  request(options, function (error, response, body) {
+
+    if (!error && response.statusCode == 200) {
+      const $ = cheerio.load(body);
+      let notifs = [];
+      var reg = /&numg=([0-9]+)/
+      $('.trnotif').each(function(i,e) {
+        let avatar = $(this).find('.tdavatar');
+        let id = reg.exec(avatar.find('a').attr('href'))[1];
+        let img = avatar.find('img').attr('src');
+        let mess = $(this).find('.tdmessage');
+        let content = mess.find('div');
+        content.find('br').replaceWith(' ');
+
+        notifs[i] = {
+          avatar:img,
+          id: id,
+          url: mess.find('a').attr('href'),
+          content: content.text(),
+        }
+      });
+
+      res.json({
+        notifs: notifs,
+      });
+      console.log("ok");
+    } else { 
+      res.json({
+        error : "error request"
+      });
+    }
+  });
+}
+
+module.exports.getOld = function(req,res) {
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded',
+    'cookie' : req.body.cookie
+  }
+
+  var deb;
+  if (req.query.page && req.query.page > 1) {
+    deb = (req.query.page-1) * 20;
+  } else {
+    deb = 0;
+  }
+
+  let url = "https://www.animationsource.org/hub/fr/notifs/&deb=" + deb;
+  var options = {
+    url: url,
+    method: 'GET',
+    encoding: 'binary',
+    headers: headers,
+    form: {
+    }
+  }
+  
+  request(options, function (error, response, body) {
+
+    if (!error && response.statusCode == 200) {
+      const $ = cheerio.load(body);
+      let notifs = [];
+      var reg = /&numg=([0-9]+)/
+      $('.trnotif').each(function(i,e) {
+        let avatar = $(this).find('.tdavatar');
+        let id = reg.exec(avatar.find('a').attr('href'))[1];
+        let img = avatar.find('img').attr('src');
+        let mess = $(this).find('.tdmessage');
+        let content = mess.find('div');
+        content.find('br').replaceWith(' ');
+
+        notifs[i] = {
+          avatar:img,
+          id: id,
+          url: mess.find('a').attr('href'),
+          content: content.text(),
+        }
+      });
+
+      res.json({
+        notifs: notifs,
+      });
+      console.log("ok");
+    } else { 
+      res.json({
+        error : "error request"
+      });
+    }
+  });
+}
 
 module.exports.register = function(req,res) {
   var reg = /\[([A-Za-z0-9-_]*)\]/;
