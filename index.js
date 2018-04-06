@@ -241,6 +241,16 @@ router.route('/chars/:lang/:sitename/:id')
   chars.view(req,res);
 })
 
+router.route('/chars/:lang/:sitename/:id/comments')
+// GET
+.get(function(req,res) { // req.query.page = The Page 
+  chars.com(req,res);
+})
+.post(function(req,res) {
+  chars.sendcom(req,res);
+})
+
+
 router.route('/custom/')
 // GET
 .post(function(req,res) {

@@ -136,12 +136,7 @@ module.exports.com = function (req, res, type) {
   } else {
     deb = 0;
   }
-  let url;
-  if (req.params.id) {
-    url = 'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/view_fan' + type + '/&numg='+ req.params.id + '&numart=' + req.params.idartist + '&deb_comm=' + deb;
-  } else {
-    url =  'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/fan' + type + '/&numg=' + req.params.idartist + '&deb_comm=' + deb;
-  }
+  let url =  'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/chars/&numg=' + req.params.id + '&deb_comm=' + deb;
   var options = {
     url: url,
     method: 'GET',
@@ -189,12 +184,7 @@ module.exports.sendcom = function (req, res, type) {
     'Content-Type':     'application/x-www-form-urlencoded',
     'cookie' : req.body.cookie
   }
-  let url;
-  if (req.params.id) {
-    url = 'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/view_fan' + type + '/&numg='+ req.params.id + '&numart=' + req.params.idartist;
-  } else {
-    url =  'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/fan' + type + '/&numg=' + req.params.idartist;
-  }
+  let url =  'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/chars/&numg=' + req.params.id;
   var options = {
     url: url + '&dopost=1',
     method: 'POST',
