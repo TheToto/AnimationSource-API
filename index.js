@@ -13,6 +13,7 @@ const fanfic = require('./fanfic');
 const news = require('./news');
 const other = require('./other');
 const notif = require('./notif');
+const chars = require('./chars');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,7 +54,7 @@ router.route('/notif/remove') // Remove a notif
 
 router.route('/notif/send') // send a notif to all users (TEMPORAIRE)
 .post(function(req,res){
-  notif.sendAll(req,res);
+  //notif.sendAll(req,res);
 });
 
 router.route('/news')
@@ -231,8 +232,13 @@ router.route('/fan:type/:lang/:sitename/:idartist/:id*?/comments')
 router.route('/chars/:lang/:sitename/')
 // GET
 .get(function(req,res) { // req.query.page = The Page 
-  //chars.main(req,res);
-  res.json({message : "Soon."});
+  chars.main(req,res);
+})
+
+router.route('/chars/:lang/:sitename/:id')
+// GET
+.get(function(req,res) { // req.query.page = The Page 
+  chars.view(req,res);
 })
 
 router.route('/custom/')

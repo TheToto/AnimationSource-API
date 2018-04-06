@@ -9,11 +9,12 @@ let expo = new Expo();
 
 var firebase = require('firebase-admin');
 
-firebase.initializeApp({
-  credential: firebase.credential.cert(JSON.parse(process.env.firebase_admin)),
-  databaseURL: 'https://as-app-d9d7f.firebaseio.com'
-});
-
+try {
+  firebase.initializeApp({
+    credential: firebase.credential.cert(JSON.parse(process.env.firebase_admin)),
+    databaseURL: 'https://as-app-d9d7f.firebaseio.com'
+  });
+} catch(e) { console.log(e); }
 
 module.exports.getNew = function(req,res) {
   var headers = {
