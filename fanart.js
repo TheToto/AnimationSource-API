@@ -128,6 +128,7 @@ module.exports.artist = function (req, res, type) {
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
       let reg = /\/([0-9]+).html&numart=([0-9]+)/
+      let reg2 = /\/([0-9]+).html/
       let imgs =[];
       let sel = "div[id$=global] div[id*=_20] > table";
       $(sel).each(function(i,elem) {
@@ -136,9 +137,19 @@ module.exports.artist = function (req, res, type) {
         let regres = reg.exec(img.parent().attr('href'));
         let id = regres[1];
         let authorid = regres[2];
+        let chars = [];
+        $(this).find('table').find('img').each(function(i,e) {
+          let item = {
+            img: $(this).attr('src'),
+            name: $(this).attr('title'),
+            id: reg2.exec($(this).parent().attr('href'))[1],
+          }
+          chars.push(item);
+        })
         imgs[i] = {
           name: name,
           id: id,
+          chars: chars,
           authorid: authorid,
           img: img.attr('src')
         }

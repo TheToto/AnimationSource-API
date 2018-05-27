@@ -74,8 +74,15 @@ module.exports.view = function (req, res, type) {
     //'cookie' : req.body.cookie
   }
 
+  var deb;
+  if (req.query.page && req.query.page > 1) {
+    deb = 12 + (req.query.page-2) * 60;
+  } else {
+    deb = 0;
+  }
+
   var options = {
-    url: 'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/chars/&numg='+ req.params.id,
+    url: 'https://www.animationsource.org/' + req.params.sitename +'/'+ req.params.lang + '/chars/&numg='+ req.params.id + "&deb=" + deb,
     method: 'GET',
     encoding: 'binary',
     headers: headers,
@@ -86,6 +93,8 @@ module.exports.view = function (req, res, type) {
 
     if (!error && response.statusCode == 200) {
       const $ = cheerio.load(body);
+      let reg = /\/([0-9]+).html/
+      let reg_art = /\/([0-9]+).html&numart=([0-9]+)/
 
       let desc = $('#description');
       let img = "https://www.animationsource.org/" + desc.find('img').first().attr('src');
@@ -104,11 +113,50 @@ module.exports.view = function (req, res, type) {
       } else {
         com_sel = '#last_comments';
       }
+
+      let im_sel;
+      if (req.params.lang == 'fr') {
+        im_sel = ['#images', '#dessins'];
+      } else {
+        im_sel = ['#images', '#dessins'];
+      }
+
+      let apparitions = [];
+      for (let sel in im_sel) {
+        let a_authors = [];
+        $('body').find(im_sel[sel] + " > a").each(function(i,e) {
+          a_authors.push({
+            name: $(this).children().first().text(),
+            id: reg.exec($(this).attr('href'))[1],
+          });
+        });
+        let a_imgs = []; 
+        $(im_sel[sel] + "> center").each(function(i,e) {
+          let imgs_art = [];
+          $(this).find("a").each(function(i,e){
+            let reg_res = reg_art.exec($(this).attr('href'));
+            imgs_art.push({
+              title: $(this).children().first().attr('title'),
+              id: reg_res[1],
+              artistid: reg_res[2],
+              img: $(this).children().first().attr('src')
+            });
+          })
+          a_imgs.push(imgs_art);
+        });
+        let app_res = [];
+        for (let nb in a_authors) {
+          app_res.push({author: a_authors[nb], imgs: a_imgs[nb]});
+        }
+        apparitions.push({type: im_sel[sel], res: app_res});
+      }
+      // MISSING FANFIC (trop cancer, html trop mal organisé pour parser ca...)
       res.json({
         title: name,
         profile: profil.html(),
         desc: desc.html(),
         img: img,
+        apparitions: apparitions,
         comment: com.getCom($,$(com_sel)),
         options : options, 
         methode : req.method
